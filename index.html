@@ -1,0 +1,679 @@
+<!-- NESTED FLOW PAGES -->
+<div class="wrapper-container js-form-validate nested-page-container">
+                        
+    <!--Error Message-->
+    <apex:outputPanel id="theError" rendered="{!AND(errorMsg != '', errorMsg != null)}" styleClass="form-error-message">
+        <div class="mt-2 mb-4 text-danger text-atted text-formatted">
+            {!errorMsg}
+        </div>
+    </apex:outputPanel>
+    
+    <!--Success Message-->
+    <apex:outputPanel id="theSuccess" rendered="{!AND(successMsg != '', successMsg != null)}">
+        <div class="mt-2 mb-4 text-formatted">
+            {!successMsg}
+        </div>
+    </apex:outputPanel>
+    
+    <!--Show Login Page after checking user email already present in Salesforce-->
+    <apex:outputPanel rendered="{!showLogin}" id="loginP"> 
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRegisterButtonsJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation email-recognised-container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="email-recognised-header">Hello again, it looks like you already have an account!</h3>
+                    <p class="subtitle-login">Pop in your password to sign in. If you can't remember your password, just tap "Forgot your password?".</p>
+                </div>
+            </div>
+            <!--Login Email-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input">
+                        <label for="email1">Email Address*</label>
+                        <input type="email" required="true" class="form-control" id="email1" html-autocomplete="off" html-placeholder=""/>
+                    </div>
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="empty">Please enter your email address</small>
+                        <small class="form-text text-danger typeMismatch" data-hint-rule="typeMismatch">Please enter a valid email address</small>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!--Login Password-->
+            <div class="form-group input-password pw-eye row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input with-icon-eye">
+                        <label for="pwd">Password*</label>
+                        <input type="password" required="true" class="form-control" id="pwd" placeholder=""/>
+                        <span toggle="#pwdReg" class="fa fa-fw fa-eye field-icon-eye js-toggle-password" onclick="listenForPassword(event)"></span>
+                    </div>
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="empty">Please enter your password</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!--login button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <button onclick="validatePassword(event);" class="btn btn-cta btn-success btn-block" oncomplete="addListeners()">Log in</button>
+                </div>
+            </div>
+            
+            <!--Forgot Password Link-->
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <apex:outputPanel rendered="{! !showReset}">
+                        <apex:commandLink action="{!showResetPage}" styleClass="btn btn-link btn-block forgot-password-link" value="Forgot your password?" reRender="wholepage"/>
+                    </apex:outputPanel>
+                </div>
+            </div>
+            
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Login Page after checking user email already present in Salesforce-->
+    
+    <!--START - Show Resiter With Email - Email Page-->
+    <apex:outputPanel rendered="{!showRegisterWithEmailPage}" id="checkRegisterWithEmail" styleClass="registerWithEmail">   
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRegisterButtonsJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation register-step">
+            <div class="row">
+                <div class="col-12 register-page-header">
+                    <h3 class="register-heading">Hey, can we take your email address?</h3>
+                    <p class="register-subheading">Don't worry, we'll keep your email private.</p>
+                </div>
+            </div>
+            <!--Email-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 email-register-input">
+                    <div class="form-input">
+                        <label for="email2">Email Address*</label>
+                        <input type="email" required="true" class="form-control" id="email2" html-autocomplete="off" html-placeholder=""/>
+                    </div>
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="short">A bit too short, sorry</small>
+                        <small class="form-text text-danger" data-hint-rule="empty">Please enter your email address.</small>
+                        <small class="form-text text-danger typeMismatch" data-hint-rule="typeMismatch">Oops, it looks like your email is incorrect.</small>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!--privacy policy -->
+            <div class="row">
+                <div class="col-12">
+                    <label class="email-register-label" for="privacy">By continuing you acknowledge that you have read our <a onclick="showPrivacy()" href="#" class="btn-link">privacy policy.</a></label>
+                </div> 
+            </div>
+            
+            <!--Email validate button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <button onclick="validateEmail(event);" class="btn btn-cta btn-success btn-block js-next email-register-cta" oncomplete="addListeners()">Next <apex:image url="{!URLFOR($Resource.ElloTheme,'/next.png')}" styleClass="cta-arrow"/></button>
+                </div>
+            </div>
+            
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Resiter With Email - Email Page-->
+    
+    <!--START - Show Resiter With Email - Name Page-->
+    <apex:outputPanel rendered="{!showNames}" id="namesP" styleClass="registerName">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRegisterEmailPageJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation register-name-page register-step">
+            <div class="row">
+                <div class="col-12 register-page-header">
+                    <h3 class="register-heading">And your name?</h3>
+                </div>
+            </div>
+            <!--First name-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input">
+                        <label for="firstName">First Name*</label>
+                        <input type="text" class="required form-control" id="firstName" html-autocomplete="off" required="true" html-placeholder=""/>
+                    </div>
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="short">A bit too short, sorry</small>
+                        <small class="form-text text-danger" data-hint-rule="empty">Please provide your first name</small>
+                    </div>
+                </div> 
+            </div> 
+            
+            <!--Last name-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input">
+                        <label for="lastName">Last Name*</label>
+                        <input type="text" class="required form-control" id="lastName" html-autocomplete="off" required="true" html-placeholder=""/>
+                    </div>
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="short">A bit too short, sorry</small>
+                        <small class="form-text text-danger" data-hint-rule="empty">Please provide your last name</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Names validate button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <button onclick="validateUserNameJS(event);" class="btn btn-cta btn-success btn-block js-next email-register-cta" oncomplete="addListeners()">Next <apex:image url="{!URLFOR($Resource.ElloTheme,'/next.png')}" styleClass="cta-arrow"/></button>
+                </div>
+            </div>
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Resiter With Email - Name Page-->
+    
+    <!--START - Show Register With Email For Natwest and RBS - Email Page-->
+    <apex:outputPanel rendered="{!showRegisterWithEmailPinPage}" id="checkRegisterWithEmailWithPin" styleClass="bankRegisterEmail">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showNatwestMembershipNoPageJS()" class="btn btn-back backToNatwestMembershipNo"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+                <button onclick="showRBSMembershipNoPageJS()" class="btn btn-back backToRBSMembershipNo"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+                <button onclick="showGiftNoPageJS()" class="btn btn-back backToGiftNo"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="bank-heading">Now, what's your email?</h3>
+                    <p class="subtitle-login">Don't worry, we'll keep your email private.</p>
+                </div>
+            </div>
+            <!--Email-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input">
+                        <label for="email2">Email Address*</label>
+                        <input type="email" required="true" class="form-control" id="email2" html-autocomplete="off" html-placeholder=""/>
+                    </div>
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="short">A bit too short, sorry</small>
+                        <small class="form-text text-danger" data-hint-rule="empty">Please enter your email address.</small>
+                        <small class="form-text text-danger" data-hint-rule="email">Oops, it looks like your email is incorrect.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!--help message for banks -->
+            <div class="bank-help-message">
+                <div class="speech-container"><apex:image url="{!URLFOR($Resource.ElloTheme,'/speech.svg')}" styleClass="speech-icon"/></div>
+                <div class="message-container"><p class="bank-message-text">Please make sure you use the same email address you provided to <span class="bank-name"></span>.</p></div>
+            </div>
+            
+            <!--privacy policy -->
+            <div class="row">
+                <div class="col-12">
+                    <label class="form-privacy-policy-label" for="privacy">By continuing you acknowledge that you have read our <a onclick="showPrivacy()" href="#" class="btn-link">privacy policy.</a></label>
+                </div> 
+            </div>
+            
+            <!--Email validate button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <button onclick="validateEmailForNwRBS(event);" class="btn btn-cta btn-success btn-block js-next next-button" oncomplete="addListeners()">Next <apex:image url="{!URLFOR($Resource.ElloTheme,'/next.png')}" styleClass="cta-arrow"/></button>
+                </div>
+            </div>
+            
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Register With Email For Natwest and RBS - Email Page-->
+    
+    <!--START - Show Create New Password Page-->
+    <apex:outputPanel rendered="{!showCreatePasswordPage}" id="createPassword" styleClass="registerCreatePassword">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRegisterNamePageJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation register-password-page register-step">
+            <div class="row">
+                <div class="col-12 register-page-header">
+                    <h3 class="register-heading">Now, create your password</h3>
+                </div>
+            </div>
+            <!--password-->
+            <div class="form-group input-password pw-eye row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <div class="form-input with-icon-eye">
+                        <label for="pwd">Password *</label>
+                        <input type="password" required="true" class="form-control" id="pwd" placeholder=""/>
+                        <span toggle="#pwdReg" class="fa fa-fw fa-eye field-icon-eye js-toggle-password" onclick="listenForPassword(event)"></span>
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="empty">Please provide your password.</small>
+                        <small class="form-text text-danger password-requirement-error" data-hint-rule="empty">Password requirements not met.</small>
+                    </div>
+                    <div class="password-hint-container">
+                        <h3 class="password-hint-header">Your password must include:</h3>
+                        <div class="password-hint"><div class="Length glyphicon glyphicon-remove"></div> 8 characters</div>
+                        <div class="password-hint"><div class="Numbers glyphicon glyphicon-remove"></div> 1 number</div>
+                        <div class="password-hint"><div class="UpperCase glyphicon glyphicon-remove"></div> 1 uppercase letter</div>
+                        <div class="password-hint"><div class="Symbols glyphicon glyphicon-remove"></div> 1 special character</div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!--Names validate button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <button onclick="validateNewPasswordJS(event);" class="btn btn-cta btn-success btn-block js-next email-register-cta" oncomplete="addListeners()">Next <apex:image url="{!URLFOR($Resource.ElloTheme,'/next.png')}" styleClass="cta-arrow"/></button>
+                </div>
+            </div>
+            
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Create New Password Page-->
+    
+    <!--START - Show Register With Natwest Page-->
+    <apex:outputPanel rendered="{!showRegisterWithNatwestPage}" id="registerNatwest" styleClass="registerWithNatwest">
+        <!-- Back Button -->                           
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRegisterButtonsJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation">
+            <div class="row bank-welcome-message-container">
+                <apex:image url="{!URLFOR($Resource.ElloTheme,'/bank-background.svg')}" styleClass="bank-background"/>
+                <div class="col-md-7 bank-images">
+                    <apex:image url="{!URLFOR($Resource.ElloTheme,'/tc-logo.png')}" styleClass="tastecard-logo"/>
+                    <apex:image url="{!URLFOR($Resource.ElloTheme,'/togetherwithNatWest.png')}" styleClass="natwest-logo"/> 
+                </div>                                   
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h3>Already a NatWest customer?</h3>
+                    <p class="form-privacy-policy-label">Existing Silver, Platinum, Student and Graduate NatWest account holders get a tastecard membership for free. Create your free account today to check out what tastecard has to offer!</p>
+                </div>
+            </div>
+            <!--Get Started button-->
+            <div class="form-group row justify-content-center natwest-cta">
+                <div class="col-12 col-sm-7 no-padding">
+                    <apex:commandButton action="{!showNatwestMembershipNumberPage}" styleClass="btn btn-cta btn-success btn-block" value="Get Started" reRender="wholepage" oncomplete="addListeners()"/>
+                </div>
+            </div>
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Resiter With Natwest Page-->
+    
+    <!--START - Show Resiter With RBS Page-->
+    <apex:outputPanel rendered="{!showRegisterWithRBSPage}" id="registerRbs" styleClass="registerWithRBS">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRegisterButtonsJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation">
+            <div class="row bank-welcome-message-container">
+                <apex:image url="{!URLFOR($Resource.ElloTheme,'/bank-background.svg')}" styleClass="bank-background"/>
+                <div class="col-md-7 bank-images">
+                    <apex:image url="{!URLFOR($Resource.ElloTheme,'/tc-logo.png')}" styleClass="tastecard-logo"/>
+                    <apex:image url="{!URLFOR($Resource.ElloTheme,'/togetherwithRBS.svg')}" styleClass="rbs-logo"/> 
+                </div>                                   
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h3>Already a Royal Bank of Scotland customer?</h3>
+                    <p class="form-privacy-policy-label">Existing Silver, Platinum, Student and Graduate Royal Bank of Scotland account holders get a tastecard membership for free. Create your free account today to check out what tastecard has to offer!</p>
+                </div>
+            </div>
+            <!--Get Started button-->
+            <div class="form-group row justify-content-center rbs-cta">
+                <div class="col-12 col-sm-7 no-padding">
+                    <apex:commandButton action="{!showRbsMembershipNumberPage}" styleClass="btn btn-cta btn-success btn-block" value="Get Started" reRender="wholepage" oncomplete="addListeners()"/>
+                </div>
+            </div>
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Resiter With RBS Page-->
+    
+    <!--START - Show Natwest Membership Number Page-->
+    <apex:outputPanel rendered="{!showNatwestMembershipNumberPage}" id="checkNatwestMembershipNumber" styleClass="natwestMembershipNo">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showNatwestRegisterPageJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Hey, can we take your membership number?</h3>
+                    <p class="subtitle-login">Your membership number can be found in the email or letter you’ll have received from NatWest.</p>
+                </div>
+            </div>
+            <!--Membership number-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input">
+                        <label for="pin">Membership number*</label>
+                        <input type="text" class="required form-control" id="pin" html-autocomplete="off" required="true" html-placeholder=""/>
+                    </div> 
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="short">A bit too short, sorry</small>
+                        <small class="form-text text-danger" data-hint-rule="empty">Please enter membership number, redemption code or PIN</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Email validate button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <button onclick="validateMembershipNumber(event);" class="btn btn-cta btn-success btn-block js-next next-button" oncomplete="addListeners()">Next <apex:image url="{!URLFOR($Resource.ElloTheme,'/next.png')}" styleClass="cta-arrow"/></button>
+                </div>
+            </div>
+            
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show Natwest Membership Number Page-->
+    
+    <!--START - Show RBS Membership Number Page-->
+    <apex:outputPanel rendered="{!showRbsMembershipNumberPage}" id="checkRbsMembershipNumber" styleClass="rbsMembershipNo">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRBSRegisterPageJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Hey, can we take your membership number?</h3>
+                    <p class="subtitle-login">Your membership number can be found in the email or letter you’ll have received from Royal Bank of Scotland.</p>
+                </div>
+            </div>
+            <!--Membership number-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input">
+                        <label for="pin">Membership number*</label>
+                        <input type="text" class="required form-control" id="pin" html-autocomplete="off" required="true" html-placeholder=""/>
+                    </div> 
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="short">A bit too short, sorry</small>
+                        <small class="form-text text-danger" data-hint-rule="empty">Please enter membership number, redemption code or PIN</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Email validate button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <button onclick="validateMembershipNumber(event);" class="btn btn-cta btn-success btn-block js-next" oncomplete="addListeners()">Next</button>
+                </div>
+            </div>
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show RBS Membership Number Page-->
+    
+    <!--START - Show gift card Number Page-->
+    <apex:outputPanel rendered="{!showGiftMembershipNumberPage}" id="checkGiftMembershipNumber" styleClass="giftCardPage">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showRegisterButtonsJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation gift-container">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Hey, can we take your gift card number?</h3>
+                    <p class="subtitle-login">This can be a pin, redemption code, or a membership number found on the back of your gift card.</p>
+                </div>
+            </div>
+            <!--Membership number-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <div class="form-input">
+                        <label for="pin">Gift card number*</label>
+                        <input type="text" class="required form-control" id="pin" html-autocomplete="off" required="true" html-placeholder=""/>
+                    </div> 
+                    <div class="form-help">
+                        <small class="form-text text-danger" data-hint-rule="short">A bit too short, sorry</small>
+                        <small class="form-text text-danger" data-hint-rule="empty">Please enter membership number, redemption code or PIN</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Email validate button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7 no-padding">
+                    <button onclick="validateMembershipNumber(event);" class="btn btn-cta btn-success btn-block js-next email-register-cta" oncomplete="addListeners()">Next <apex:image url="{!URLFOR($Resource.ElloTheme,'/next.png')}" styleClass="cta-arrow"/></button>
+                </div>
+            </div>
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Show gift card Number Page-->
+    
+    <!--START - Marketing Checkbox-->
+    <apex:outputPanel rendered="{!showRegLastPage}" id="regLastPage" styleClass="marketingPage">
+        <!-- Back Button -->
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="showCreatePasswordJS()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        
+        <div class="row progress-bar">
+            <div class="progress-indicator"></div>
+        </div>
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation register-step update-page-container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="update-page-header">Lastly, would you like to receive updates?</h3>
+                </div>
+            </div>
+            <!--Select Options-->
+            <div class="form-group row justify-content-center" id="markPref">
+                <div class="col-12 col-sm-7 update-text-wrapper">
+                    <div class="wrapper-text">
+                        <label class="form-check-label update-text" for="market">{!$Label.ELLO_MobileMarketingText}</label>
+                        <div>
+                            <div class="checkbox-container"> 
+                                <div class="form-check custom-control custom-radio">
+                                    <input required="true" class="form-check-input custom-control-input" type="radio" name="marketingPrefs" id="yesRadio" value="true"/>
+                                    <label class="form-check-label custom-control-label" for="yesRadio">
+                                        Yes, sign me up
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="checkbox-container">
+                                <div class="form-check custom-control custom-radio">
+                                    <input required="true" class="form-check-input custom-control-input" type="radio" name="marketingPrefs" id="noRadio" value="false"/>
+                                    <label class="form-check-label custom-control-label" for="noRadio">
+                                        No thanks, I don't want any updates
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-help">
+                                <small class="form-text text-danger" data-hint-rule="empty">Please select an option</small>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            
+            <!--Register User button-->
+            <div class="form-group row justify-content-center register-link">
+                <div class="col-12 col-sm-7 register-button-wrapper">
+                    <label class="form-privacy-policy-label register-label" for="privacy">By signing up, you agree to our <a onclick="showTerms()" href="#" class="btn-link">Terms and Conditions</a> and acknowledge that you have read the <a onclick="showPrivacy()" href="#" class="btn-link">Privacy Policy</a> and <a href="https://www.tastecard.co.uk/Footer-Pages/cookie-policy" class="btn-link">Cookie Policy</a>.</label>
+                    <button onclick="registerUser(event);" class="btn btn-cta btn-success btn-block js-next" oncomplete="addListeners()">Register</button>
+                </div>
+            </div>                                
+            
+        </apex:form>
+    </apex:outputPanel>
+    <!--END - Marketing Checkbox-->
+    
+    <!-- Commenting out the sub components for the privacy and terms pages Privacy policy page-->
+    <apex:outputPanel rendered="{!showPrivacyScreen}" id="privacyP">
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="goBackFromPrivacy()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+
+        <div class='align-left'>
+            <c:tastecardPrivacyPolicy ></c:tastecardPrivacyPolicy>
+        </div>
+    </apex:outputPanel>
+    
+    <!-- Ts&Cs page -->
+    <apex:outputPanel rendered="{!showTermsScreen}" id="termsP">
+        <div class="row back-button-sub-page">
+            <div class="col-12">
+                <button onclick="goBackFromTandCs()" class="btn btn-back"><apex:image url="{!$Resource.tastecardBack}" styleClass="img-back"/></button>
+            </div>
+        </div>
+        <div class='align-left'>
+            <c:tastecardTermsAndConditions ></c:tastecardTermsAndConditions>
+        </div>
+    </apex:outputPanel>
+    
+    <!--Confirm Login-->
+    <apex:outputPanel rendered="{!showRegLogin}">
+        <apex:form html-novalidate="" styleClass="form-horizontal needs-validation">
+            <!--login after registation button-->
+            <div class="form-group row justify-content-center">
+                <div class="col-12 col-sm-7">
+                    <apex:commandButton action="{!login}" styleClass="btn btn-cta btn-success btn-block" value="Confirm Login"/>
+                </div>
+            </div>
+        </apex:form>
+    </apex:outputPanel>
+</div>    
+<!-- END NESTED FLOW PAGES -->
+</div>
+</div>
+</div>
+
+<div id="spinner" class="spinnerContainer hidden">
+<div class="d-flex justify-content-center align-items-center">
+<div class="spinner-border" role="status">
+<span class="sr-only">Loading...</span>
+</div> 
+</div>
+</div>
+
+<!--spinner-->
+<apex:actionStatus id="status">
+<apex:facet name="start">
+<div class="spinnerContainer">
+<div class="d-flex justify-content-center align-items-center">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div> 
+</div>
+</div>
+</apex:facet>
+</apex:actionStatus>
+
+<!--Action functions - call Apex from JS-->
+<apex:form >
+<apex:actionFunction name="checkCustomerStatus" action="{!checkCustomerStatus}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="email2" assignTo="{!email}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="checkRegisterNamePage" action="{!showNamesForRegistration}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="email2" assignTo="{!email}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="resetPass" action="{!resetPassword}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="email" assignTo="{!email}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="login" action="{!login}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="email" assignTo="{!email}" value=""/>
+<apex:param name="pwd" assignTo="{!password}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="showActivation" action="{!showActivationPage}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="subBrand" assignTo="{!subBrand}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="membershipNumber" action="{!showRegisterWithEmailPinPage}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="pin" assignTo="{!pin}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="regUser" action="{!registerOrActivateUser}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="firstName" assignTo="{!firstName}" value=""/>
+<apex:param name="lastName" assignTo="{!lastName}" value=""/>
+<apex:param name="email" assignTo="{!email}" value=""/>
+<apex:param name="pin" assignTo="{!pin}" value=""/>
+<apex:param name="pass" assignTo="{!password}" value=""/>
+<apex:param name="markPref" assignTo="{!marketingOptIn}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="backToHome" action="{!showHome}" status="status" rerender="wholepage"/>
+<apex:actionFunction name="showPrivacy" action="{!showPrivacy}" status="status" rerender="wholepage"/>
+<apex:actionFunction name="showTerms" action="{!showTerms}" status="status" rerender="wholepage"/>
+<apex:actionFunction name="validateUserName" action="{!showCreatePasswordPage}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="firstName" assignTo="{!firstName}" value=""/>
+<apex:param name="lastName" assignTo="{!lastName}" value=""/>
+</apex:actionFunction>
+<apex:actionFunction name="showGiftNoPage" action="{!showGiftMembershipNumberPage}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showRegisterEmailPage" action="{!showRegisterWithEmailPage}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showRegisterWithEmailPinPage" action="{!showRegisterWithEmailPinPage}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showRegisterNatwestPage" action="{!registerWithNatwest}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showRegisterRBSPage" action="{!registerWithRbs}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showRegisterNamePage" action="{!showNamesForRegistration}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showRegisterButtons" action="{!showRegisterScreen}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showCreatePassword" action="{!showCreatePasswordPage}" rerender="wholepage" oncomplete="addListeners()"/>            
+<apex:actionFunction name="showRBSMembershipNoPage" action="{!showRbsMembershipNumberPage}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="showNatwestMembershipNoPage" action="{!showNatwestMembershipNumberPage}" rerender="wholepage" oncomplete="addListeners()"/>
+<apex:actionFunction name="validateNewPassword" action="{!showRegLastPage}" rerender="wholepage" status="status" oncomplete="addListeners()">
+<apex:param name="pwd" assignTo="{!password}" value=""/>
+</apex:actionFunction>
+</apex:form>
+</apex:outputPanel>                               
+</apex:page>
